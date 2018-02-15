@@ -95,14 +95,71 @@ public class Plateau {
     public boolean deplacerPiece(String caseChoix, String caseCible){
         int deplacementLargeur = mapKeyTableau.get(caseCible.substring(0,1)) - mapKeyTableau.get(caseChoix.substring(0,1));
         int deplacementHauteur = Integer.parseInt(caseCible.substring(1)) - Integer.parseInt(caseChoix.substring(1));
-        if(tableau.get(caseChoix).getPiece().movePieceHauteur(deplacementHauteur, deplacementLargeur)){
-            if(tableau.get(caseCible).getContent()){
+
+        int tmpColonne = mapKeyTableau.get(caseChoix.substring(0,1));
+        int tmpLigne = Integer.parseInt(caseChoix.substring(1));
+
+        if(tableau.get(caseChoix).getPiece().checkLegaliteMove(deplacementHauteur, deplacementLargeur)){
+            if(deplacementHauteur > 0 && deplacementLargeur > 0) {
+                // Je vais de A1 vers B2
+                for(int i = 1; i < deplacementHauteur+1; i++){
+                    System.out.println(listeColonne[tmpColonne+i]+(tmpLigne+i));
+                }
+            }
+            if(deplacementHauteur > 0 && deplacementLargeur < 0){
+                // Je vais A2 vers B1
+                for(int i = 1; i < deplacementHauteur+1; i++){
+                    System.out.println(listeColonne[tmpColonne-i]+(tmpLigne+i));
+                }
+            }
+            if(deplacementHauteur < 0 && deplacementLargeur > 0){
+                // Je vais de B1 vers A2
+                for(int i = 1; i < deplacementLargeur+1; i++){
+                    System.out.println(listeColonne[tmpColonne+i]+(tmpLigne-i));
+                }
+            }
+            if(deplacementHauteur < 0 && deplacementLargeur < 0){
+                // Je vais de B2 vers A1
+                for(int i = 1; i < (deplacementHauteur*-1)+1; i++){
+                    System.out.println(listeColonne[tmpColonne-i]+(tmpLigne-i));
+                }
+            }
+            if(deplacementHauteur > 0 && deplacementLargeur == 0){
+                // Je vais de A1 vers A8
+            }
+            if(deplacementHauteur < 0 && deplacementLargeur == 0){
+                // Je vais de A8 vers A1
+            }
+            if(deplacementHauteur == 0 && deplacementLargeur > 0){
+                // Je vais de A1 vers C1
+            }
+            if(deplacementHauteur == 0 && deplacementLargeur < 0){
+                // Je vais de C1 vers A1
+            }
+
+            /*if(deplacementHauteur > 0 && deplacementLargeur > 0){
+                for(int i = 1 ; i < deplacementHauteur+1 ; i++){
+                    if(tableau.get(listeColonne[tmpColonne+i]+(tmpLigne+i)).getContent()){
+                        System.out.println("Il y a une pièce");
+                    } else {
+                        System.out.println("Il n'y a pas de pièce");
+                    }
+                }
+            } else {
+                System.out.println("Deplacement horizontale ou verticale");
+            }
+
+            /*if(tableau.get(caseCible).getContent()){
                 System.out.println("Coquinou, la case est pleine, et le code est pas prêt");
             } else {
                 tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAfficher());
                 tableau.get(caseChoix).removePiece();
-            }
+            }*/
+        } else {
+            System.out.println("Le déplacement désiré n'est pas autorisé sur cette pièce");
         }
+
+
         return true;
     }
 }

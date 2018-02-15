@@ -12,10 +12,11 @@ public class Main {
         int choixMenu;
 
         do{
-            System.out.println("Sélectionner une option (valeur entiere):");
+
             System.out.println("0. Stopper la partie");
             System.out.println("1. Voir le tableau");
             System.out.println("2. Choisir une case");
+            System.out.print("Choix du menu (valeur entiere): ");
             choixMenu = scInt.nextInt();
             switch (choixMenu){
                 case 0:
@@ -23,20 +24,16 @@ public class Main {
                     break;
                 case 1:
                     System.out.println("");
-                    System.out.println("");
-                    System.out.println("");
                     Echec.affichePlateau();
-                    System.out.println("");
-                    System.out.println("");
                     System.out.println("");
                     break;
                 case 2:
-                    System.out.println("Veuillez saisir la case :");
+                    System.out.print("Veuillez saisir la case :");
                     String caseChoix = scString.nextLine();
                     Case test = Echec.getPieceCase(caseChoix);
                     if(test.getContent()){
                         System.out.println("Case " + caseChoix + " contenant : " + test.getNomAfficher());
-                        System.out.println("Veuillez saisir la case cible : ");
+                        System.out.print("Veuillez saisir la case cible : ");
                         String caseCible = scString.nextLine();
                         Echec.deplacerPiece(caseChoix, caseCible);
                     } else {
