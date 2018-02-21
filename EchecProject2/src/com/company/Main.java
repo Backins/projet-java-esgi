@@ -4,12 +4,14 @@ import java.lang.reflect.Type;
 import java.util.*;
 
 public class Main {
+
     public static void main(String[] args) {
         Plateau Plateau = new Plateau();
         Scanner scannerString = new Scanner(System.in);
         boolean partieTerminee = false;
         int numJoueur = 0;
         boolean nextJoueur;
+        boolean entreeValide = false;
 
         System.out.println("");
         Plateau.getPlateau();
@@ -29,11 +31,29 @@ public class Main {
             do{
                 System.out.print("Choisissez la case :");
                 String caseChoisi = scannerString.nextLine();
-                Case temp = Plateau.getPieceCase(caseChoisi);
-                if(temp.isTaken()){
-                    System.out.println("La case " + caseChoisi + " contient la pièce : " + temp.getNomAffiche());
+                if(isValidLetter(caseChoisi)){
+                    if(isValidNumber(caseChoisi)){
+                        entreeValide = true;
+                    } else{
+                        break;
+                    }
+                } else {
+                    break;
+                }
+                if(Plateau.getPieceCase(caseChoisi).isTaken()){
+                    System.out.println("La case " + caseChoisi + " contient la pièce : " + Plateau.getPieceCase(caseChoisi).getNomAffiche());
                     System.out.print("Choisissez la case cible : ");
                     String caseCible = scannerString.nextLine();
+
+                    if(isValidLetter(caseCible)){
+                        if(isValidNumber(caseChoisi)){
+                            entreeValide = true;
+                        } else{
+                            break;
+                        }
+                    } else {
+                        break;
+                    }
                     Plateau.deplacerPiece(caseChoisi, caseCible);
                     nextJoueur = true;
                 } else {
@@ -42,6 +62,11 @@ public class Main {
                 }
             } while (nextJoueur == false);
 
+            if(entreeValide == false){
+                System.out.println("La saisie n'est pas valide.");
+                break;
+            }
+
             System.out.println("");
             Plateau.getPlateau();
             System.out.println("");
@@ -49,6 +74,51 @@ public class Main {
         }while(partieTerminee == false);
 
 
+    }
+
+    public static boolean isValidLetter(String Saisie){
+        switch (Saisie.substring(0,1)){
+            case "A":
+                return true;
+            case "B":
+                return true;
+            case "C":
+                return true;
+            case "D":
+                return true;
+            case "E":
+                return true;
+            case "F":
+                return true;
+            case "G":
+                return true;
+            case "H":
+                return true;
+            default:
+                return false;
+        }
+    }
+    public static boolean isValidNumber(String Saisie){
+        switch (Saisie.substring(0,1)){
+            case "1":
+                return true;
+            case "2":
+                return true;
+            case "3":
+                return true;
+            case "4":
+                return true;
+            case "5":
+                return true;
+            case "6":
+                return true;
+            case "7":
+                return true;
+            case "8":
+                return true;
+            default:
+                return false;
+        }
     }
 }
 
@@ -172,7 +242,7 @@ class Plateau {
                         tableau.get(caseChoix).removePiece();
                     }
                 } else {
-                    if(TypePieceChoisi != "P"){
+                    if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
                         tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
                         tableau.get(caseChoix).removePiece();
                     } else{
@@ -197,7 +267,7 @@ class Plateau {
                         tableau.get(caseChoix).removePiece();
                     }
                 } else {
-                    if(TypePieceChoisi != "P"){
+                    if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
                         tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
                         tableau.get(caseChoix).removePiece();
                     } else{
@@ -221,7 +291,7 @@ class Plateau {
                         tableau.get(caseChoix).removePiece();
                     }
                 } else {
-                    if(TypePieceChoisi != "P"){
+                    if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
                         tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
                         tableau.get(caseChoix).removePiece();
                     } else{
@@ -245,7 +315,7 @@ class Plateau {
                         tableau.get(caseChoix).removePiece();
                     }
                 } else {
-                    if(TypePieceChoisi != "P"){
+                    if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
                         tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
                         tableau.get(caseChoix).removePiece();
                     } else{
@@ -357,17 +427,17 @@ class Plateau {
 }
 
 class Case {
-    private boolean content;
+    private boolean isTaken;
     private Piece piece;
     private String nomAffiche;
 
     public Case() {
-        content = false;
+        isTaken = false;
         nomAffiche = "  ";
     }
 
     public Case(Piece LeNomPiece, String LeNomAffiche) {
-        content = true;
+        isTaken = true;
         piece = LeNomPiece;
         nomAffiche = LeNomAffiche;
     }
@@ -376,7 +446,7 @@ class Case {
         return nomAffiche;
     }
     public boolean isTaken(){
-        return content;
+        return isTaken;
     }
     public Piece getPiece(){
         return piece;
@@ -384,12 +454,12 @@ class Case {
     public void setPiece(Piece LaPiece, String LeNomAffiche){
         piece = LaPiece;
         nomAffiche = LeNomAffiche;
-        content = true;
+        isTaken = true;
     }
     public void removePiece(){
         piece = null;
         nomAffiche = "  ";
-        content = false;
+        isTaken = false;
     }
 }
 
