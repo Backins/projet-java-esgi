@@ -5,7 +5,7 @@ public class Fou extends Piece {
         super(LaCouleurPiece);
     }
 
-    public boolean checkLegalMovement(int hauteur, int largeur){
+    public boolean checkLegaliteMouvement(int hauteur, int largeur){
         if(largeur < 0){
             largeur = largeur * -1;
         }

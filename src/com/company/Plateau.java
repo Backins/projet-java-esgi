@@ -90,32 +90,41 @@ class Plateau {
         return tableau.get(positionCase);
     }
 
-    /*public boolean checkCheminDesire(int debutLargeur, int debutColonne, int hauteur, int largeur){
-        if(debutLargeur == largeur && debutColonne == hauteur){
+    public boolean checkCheminDesire(String caseActuelle, String caseCible){
+        int largeurActuelle = mapKeyTableau.get(caseActuelle.substring(0,1));
+        int hauteurActuelle = Integer.parseInt(caseActuelle.substring(1));
+
+        int largeurCible = mapKeyTableau.get(caseCible.substring(0,1));
+        int hauteurCible = Integer.parseInt(caseCible.substring(1));
+
+        int deplacementLargeur = mapKeyTableau.get(caseCible.substring(0,1)) - mapKeyTableau.get(caseActuelle.substring(0,1));
+        int deplacementHauteur = Integer.parseInt(caseCible.substring(1)) - Integer.parseInt(caseActuelle.substring(1));
+
+        if(largeurActuelle == largeurCible && hauteurActuelle == hauteurCible){
             return true;
         }
+        if(deplacementHauteur !=0){
+            if(deplacementHauteur > 0){
+                hauteurActuelle++;
+            } else {
+                hauteurActuelle--;
+            }
+        }
+        if(deplacementLargeur !=0){
+            if(deplacementLargeur > 0){
+                largeurActuelle++;
+            } else {
+                largeurActuelle--;
+            }
+        }
 
-        if(hauteur != 0){
-            if(hauteur > 0) {
-                debutColonne++;
-            } else {
-                debutColonne--;
-            }
-        }
-        if(largeur != 0){
-            if(largeur > 0){
-                debutLargeur++;
-            } else {
-                debutLargeur--;
-            }
-        }
-        System.out.println("Pièce : " + listeColonne[debutLargeur]+debutColonne);
-        if(tableau.get(listeColonne[debutLargeur]+debutColonne).getContentPiece()){
+        if(tableau.get(listeColonne[largeurActuelle]+hauteurActuelle).getContentPiece()){
             return false;
         } else {
-            return checkCheminDesire(debutLargeur, debutColonne, hauteur, largeur);
+            return checkCheminDesire(listeColonne[largeurActuelle]+hauteurActuelle, caseCible);
         }
-    }*/
+
+    }
 
     public boolean deplacerPiece(String caseChoix, String caseCible){
         int deplacementLargeur = mapKeyTableau.get(caseCible.substring(0,1)) - mapKeyTableau.get(caseChoix.substring(0,1));
@@ -132,120 +141,40 @@ class Plateau {
             TypePieceCible = null;
         }
 
-        /*if(checkCheminDesire(debutLargeur, debutColonne, deplacementHauteur, deplacementLargeur)){
-            System.out.println("Pas de piece sur le chemin");
-        } else {
-            System.out.println("Piece sur le chemin");
-        }*/
+        if(tableau.get(caseChoix).getPiece().checkLegaliteMouvement(deplacementHauteur, deplacementLargeur)){
+            if(checkCheminDesire(caseChoix, caseCible) || TypePieceChoisi.compareToIgnoreCase("C")==0){
+                if(deplacementHauteur > 0 && deplacementLargeur > 0) {
+                    //A1 vers B2
+                    if(tableau.get(caseCible).getContentPiece()){
+                        if(tableau.get(caseChoix).getPiece().getCouleurPiece() == tableau.get(caseCible).getPiece().getCouleurPiece()){
+                            System.out.println("La case est prise par une pièce de la même couleur");
+                        }
+                        else {
+                            if(TypePieceCible.compareToIgnoreCase("R") == 0){
+                                partieFinie = true;
+                                System.out.println("Echec pour l'adversaire");
+                            }
+                            tableau.get(caseCible).removePiece();
+                            tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece(), tableau.get(caseChoix).getNomAffiche());
+                            tableau.get(caseChoix).removePiece();
+                        }
+                    } else {
+                        if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
+                            tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
+                            tableau.get(caseChoix).removePiece();
+                        } else{
+                            System.out.println("Les pions ne peuvent pas se déplacer en diagonale");
+                        }
 
-        System.out.println();
-
-        if(tableau.get(caseChoix).getPiece().checkLegalMovement(deplacementHauteur, deplacementLargeur)){
-            if(deplacementHauteur > 0 && deplacementLargeur > 0) {
-                //A1 vers B2
-                if(tableau.get(caseCible).getContentPiece()){
-                    if(tableau.get(caseChoix).getPiece().getCouleurPiece() == tableau.get(caseCible).getPiece().getCouleurPiece()){
-                        System.out.println("La case est prise par une pièce de la même couleur");
-                    }
-                    else {
-                        if(TypePieceCible.compareToIgnoreCase("R") == 0){
-                            partieFinie = true;
-                            System.out.println("Echec pour l'adversaire");
-                        }
-                        tableau.get(caseCible).removePiece();
-                        tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece(), tableau.get(caseChoix).getNomAffiche());
-                        tableau.get(caseChoix).removePiece();
-                    }
-                } else {
-                    if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
-                        tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
-                        tableau.get(caseChoix).removePiece();
-                    } else{
-                        System.out.println("Les pions ne peuvent pas se déplacer en diagonale");
-                    }
-
-                }
-            }
-            if(deplacementHauteur > 0 && deplacementLargeur < 0){
-                // B1 vers A2
-                if(tableau.get(caseCible).getContentPiece()){
-                    if(tableau.get(caseChoix).getPiece().getCouleurPiece() == tableau.get(caseCible).getPiece().getCouleurPiece()){
-                        System.out.println("La case est prise par une pièce de la même couleur");
-                    }
-                    else {
-                        if(TypePieceCible.compareToIgnoreCase("R") == 0){
-                            partieFinie = true;
-                            System.out.println("Echec pour l'adversaire");
-                        }
-                        tableau.get(caseCible).removePiece();
-                        tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece(), tableau.get(caseChoix).getNomAffiche());
-                        tableau.get(caseChoix).removePiece();
-                    }
-                } else {
-                    if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
-                        tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
-                        tableau.get(caseChoix).removePiece();
-                    } else{
-                        System.out.println("Les pions ne peuvent pas se déplacer en diagonale");
                     }
                 }
-            }
-            if(deplacementHauteur < 0 && deplacementLargeur > 0){
-                //A2 vers B1
-                if(tableau.get(caseCible).getContentPiece()){
-                    if(tableau.get(caseChoix).getPiece().getCouleurPiece() == tableau.get(caseCible).getPiece().getCouleurPiece()){
-                        System.out.println("La case est prise par une pièce de la même couleur");
-                    }
-                    else {
-                        if(TypePieceCible.compareToIgnoreCase("R") == 0){
-                            partieFinie = true;
-                            System.out.println("Echec pour l'adversaire");
+                if(deplacementHauteur > 0 && deplacementLargeur < 0){
+                    // B1 vers A2
+                    if(tableau.get(caseCible).getContentPiece()){
+                        if(tableau.get(caseChoix).getPiece().getCouleurPiece() == tableau.get(caseCible).getPiece().getCouleurPiece()){
+                            System.out.println("La case est prise par une pièce de la même couleur");
                         }
-                        tableau.get(caseCible).removePiece();
-                        tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece(), tableau.get(caseChoix).getNomAffiche());
-                        tableau.get(caseChoix).removePiece();
-                    }
-                } else {
-                    if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
-                        tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
-                        tableau.get(caseChoix).removePiece();
-                    } else{
-                        System.out.println("Les pions ne peuvent pas se déplacer en diagonale");
-                    }
-                }
-            }
-            if(deplacementHauteur < 0 && deplacementLargeur < 0){
-                //B2 vers A1
-                if(tableau.get(caseCible).getContentPiece()){
-                    if(tableau.get(caseChoix).getPiece().getCouleurPiece() == tableau.get(caseCible).getPiece().getCouleurPiece()){
-                        System.out.println("Le déplacement désiré n'est pas autorisé sur cette pièce");
-                    }
-                    else {
-                        if(TypePieceCible.compareToIgnoreCase("R") == 0){
-                            partieFinie = true;
-                            System.out.println("Echec pour l'adversaire");
-                        }
-                        tableau.get(caseCible).removePiece();
-                        tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece(), tableau.get(caseChoix).getNomAffiche());
-                        tableau.get(caseChoix).removePiece();
-                    }
-                } else {
-                    if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
-                        tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
-                        tableau.get(caseChoix).removePiece();
-                    } else{
-                        System.out.println("Les pions ne peuvent pas se déplacer en diagonale");
-                    }
-                }
-            }
-            if(deplacementHauteur > 0 && deplacementLargeur == 0){
-                //A1 vers A2
-                if(tableau.get(caseCible).getContentPiece()){
-                    if(tableau.get(caseChoix).getPiece().getCouleurPiece() == tableau.get(caseCible).getPiece().getCouleurPiece()){
-                        System.out.println("La case est prise par une pièce de la même couleur");
-                    }
-                    else {
-                        if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
+                        else {
                             if(TypePieceCible.compareToIgnoreCase("R") == 0){
                                 partieFinie = true;
                                 System.out.println("Echec pour l'adversaire");
@@ -253,23 +182,23 @@ class Plateau {
                             tableau.get(caseCible).removePiece();
                             tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece(), tableau.get(caseChoix).getNomAffiche());
                             tableau.get(caseChoix).removePiece();
+                        }
+                    } else {
+                        if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
+                            tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
+                            tableau.get(caseChoix).removePiece();
                         } else{
-                            System.out.println("Les pions ne peuvent manger qu'en diagonale");
+                            System.out.println("Les pions ne peuvent pas se déplacer en diagonale");
                         }
                     }
-                } else {
-                    tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
-                    tableau.get(caseChoix).removePiece();
                 }
-            }
-            if(deplacementHauteur < 0 && deplacementLargeur == 0){
-                //A2 vers A1
-                if(tableau.get(caseCible).getContentPiece()){
-                    if(tableau.get(caseChoix).getPiece().getCouleurPiece() == tableau.get(caseCible).getPiece().getCouleurPiece()){
-                        System.out.println("La case est prise par une pièce de la même couleur");
-                    }
-                    else {
-                        if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
+                if(deplacementHauteur < 0 && deplacementLargeur > 0){
+                    //A2 vers B1
+                    if(tableau.get(caseCible).getContentPiece()){
+                        if(tableau.get(caseChoix).getPiece().getCouleurPiece() == tableau.get(caseCible).getPiece().getCouleurPiece()){
+                            System.out.println("La case est prise par une pièce de la même couleur");
+                        }
+                        else {
                             if(TypePieceCible.compareToIgnoreCase("R") == 0){
                                 partieFinie = true;
                                 System.out.println("Echec pour l'adversaire");
@@ -277,23 +206,23 @@ class Plateau {
                             tableau.get(caseCible).removePiece();
                             tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece(), tableau.get(caseChoix).getNomAffiche());
                             tableau.get(caseChoix).removePiece();
+                        }
+                    } else {
+                        if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
+                            tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
+                            tableau.get(caseChoix).removePiece();
                         } else{
-                            System.out.println("Les pions ne peuvent manger qu'en diagonale");
+                            System.out.println("Les pions ne peuvent pas se déplacer en diagonale");
                         }
                     }
-                } else {
-                    tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
-                    tableau.get(caseChoix).removePiece();
                 }
-            }
-            if(deplacementHauteur == 0 && deplacementLargeur > 0){
-                //A1 vers B1
-                if(tableau.get(caseCible).getContentPiece()){
-                    if(tableau.get(caseChoix).getPiece().getCouleurPiece() == tableau.get(caseCible).getPiece().getCouleurPiece()){
-                        System.out.println("La case est prise par une pièce de la même couleur");
-                    }
-                    else {
-                        if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
+                if(deplacementHauteur < 0 && deplacementLargeur < 0){
+                    //B2 vers A1
+                    if(tableau.get(caseCible).getContentPiece()){
+                        if(tableau.get(caseChoix).getPiece().getCouleurPiece() == tableau.get(caseCible).getPiece().getCouleurPiece()){
+                            System.out.println("Le déplacement désiré n'est pas autorisé sur cette pièce");
+                        }
+                        else {
                             if(TypePieceCible.compareToIgnoreCase("R") == 0){
                                 partieFinie = true;
                                 System.out.println("Echec pour l'adversaire");
@@ -301,38 +230,114 @@ class Plateau {
                             tableau.get(caseCible).removePiece();
                             tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece(), tableau.get(caseChoix).getNomAffiche());
                             tableau.get(caseChoix).removePiece();
-                        } else{
-                            System.out.println("Les pions ne peuvent manger qu'en diagonale");
                         }
-                    }
-                } else {
-                    tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
-                    tableau.get(caseChoix).removePiece();
-                }
-            }
-            if(deplacementHauteur == 0 && deplacementLargeur < 0){
-                //B1 vers A1
-                if(tableau.get(caseCible).getContentPiece()){
-                    if(tableau.get(caseChoix).getPiece().getCouleurPiece() == tableau.get(caseCible).getPiece().getCouleurPiece()){
-                        System.out.println("La case est prise par une pièce de la même couleur");
-                    }
-                    else {
+                    } else {
                         if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
-                            if(TypePieceCible.compareToIgnoreCase("R") == 0){
-                                partieFinie = true;
-                                System.out.println("Echec pour l'adversaire");
-                            }
-                            tableau.get(caseCible).removePiece();
-                            tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece(), tableau.get(caseChoix).getNomAffiche());
+                            tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
                             tableau.get(caseChoix).removePiece();
                         } else{
-                            System.out.println("Les pions ne peuvent manger qu'en diagonale");
+                            System.out.println("Les pions ne peuvent pas se déplacer en diagonale");
                         }
                     }
-                } else {
-                    tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
-                    tableau.get(caseChoix).removePiece();
                 }
+                if(deplacementHauteur > 0 && deplacementLargeur == 0){
+                    //A1 vers A2
+                    if(tableau.get(caseCible).getContentPiece()){
+                        if(tableau.get(caseChoix).getPiece().getCouleurPiece() == tableau.get(caseCible).getPiece().getCouleurPiece()){
+                            System.out.println("La case est prise par une pièce de la même couleur");
+                        }
+                        else {
+                            if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
+                                if(TypePieceCible.compareToIgnoreCase("R") == 0){
+                                    partieFinie = true;
+                                    System.out.println("Echec pour l'adversaire");
+                                }
+                                tableau.get(caseCible).removePiece();
+                                tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece(), tableau.get(caseChoix).getNomAffiche());
+                                tableau.get(caseChoix).removePiece();
+                            } else{
+                                System.out.println("Les pions ne peuvent manger qu'en diagonale");
+                            }
+                        }
+                    } else {
+                        tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
+                        tableau.get(caseChoix).removePiece();
+                    }
+                }
+                if(deplacementHauteur < 0 && deplacementLargeur == 0){
+                    //A2 vers A1
+                    if(tableau.get(caseCible).getContentPiece()){
+                        if(tableau.get(caseChoix).getPiece().getCouleurPiece() == tableau.get(caseCible).getPiece().getCouleurPiece()){
+                            System.out.println("La case est prise par une pièce de la même couleur");
+                        }
+                        else {
+                            if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
+                                if(TypePieceCible.compareToIgnoreCase("R") == 0){
+                                    partieFinie = true;
+                                    System.out.println("Echec pour l'adversaire");
+                                }
+                                tableau.get(caseCible).removePiece();
+                                tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece(), tableau.get(caseChoix).getNomAffiche());
+                                tableau.get(caseChoix).removePiece();
+                            } else{
+                                System.out.println("Les pions ne peuvent manger qu'en diagonale");
+                            }
+                        }
+                    } else {
+                        tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
+                        tableau.get(caseChoix).removePiece();
+                    }
+                }
+                if(deplacementHauteur == 0 && deplacementLargeur > 0){
+                    //A1 vers B1
+                    if(tableau.get(caseCible).getContentPiece()){
+                        if(tableau.get(caseChoix).getPiece().getCouleurPiece() == tableau.get(caseCible).getPiece().getCouleurPiece()){
+                            System.out.println("La case est prise par une pièce de la même couleur");
+                        }
+                        else {
+                            if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
+                                if(TypePieceCible.compareToIgnoreCase("R") == 0){
+                                    partieFinie = true;
+                                    System.out.println("Echec pour l'adversaire");
+                                }
+                                tableau.get(caseCible).removePiece();
+                                tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece(), tableau.get(caseChoix).getNomAffiche());
+                                tableau.get(caseChoix).removePiece();
+                            } else{
+                                System.out.println("Les pions ne peuvent manger qu'en diagonale");
+                            }
+                        }
+                    } else {
+                        tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
+                        tableau.get(caseChoix).removePiece();
+                    }
+                }
+                if(deplacementHauteur == 0 && deplacementLargeur < 0){
+                    //B1 vers A1
+                    if(tableau.get(caseCible).getContentPiece()){
+                        if(tableau.get(caseChoix).getPiece().getCouleurPiece() == tableau.get(caseCible).getPiece().getCouleurPiece()){
+                            System.out.println("La case est prise par une pièce de la même couleur");
+                        }
+                        else {
+                            if(TypePieceChoisi.compareToIgnoreCase("P") != 0){
+                                if(TypePieceCible.compareToIgnoreCase("R") == 0){
+                                    partieFinie = true;
+                                    System.out.println("Echec pour l'adversaire");
+                                }
+                                tableau.get(caseCible).removePiece();
+                                tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece(), tableau.get(caseChoix).getNomAffiche());
+                                tableau.get(caseChoix).removePiece();
+                            } else{
+                                System.out.println("Les pions ne peuvent manger qu'en diagonale");
+                            }
+                        }
+                    } else {
+                        tableau.get(caseCible).setPiece(tableau.get(caseChoix).getPiece() , tableau.get(caseChoix).getNomAffiche());
+                        tableau.get(caseChoix).removePiece();
+                    }
+                }
+            } else {
+                System.out.println("Piece sur le chemin, veuillez recommencer");
             }
         } else {
             System.out.println("Le déplacement désiré n'est pas autorisé sur cette pièce");
