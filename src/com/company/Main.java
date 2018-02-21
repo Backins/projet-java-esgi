@@ -45,6 +45,11 @@ public class Main {
                         String caseCible = scString.nextLine();
 
                         Echec.deplacerPiece(caseChoix, caseCible);
+                        System.out.println("++++++++++++++++++++++++++");
+                        System.out.println("+    Etat du Plateau     +");
+                        Echec.getPlateau();
+                        System.out.println("+    Etat du Plateau     +");
+                        System.out.println("++++++++++++++++++++++++++");
                     } else {
                         System.out.println("La case est vide, retour au menu");
                     }
