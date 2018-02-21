@@ -8,11 +8,11 @@ public class Main {
         Plateau Echec = new Plateau();
         Scanner scInt = new Scanner(System.in);
         Scanner scString = new Scanner(System.in);
+        int tourDuJoueur = 0;
         boolean continuerPartie = true;
         int choixMenu;
 
         do{
-
             System.out.println("0. Stopper la partie");
             System.out.println("1. Voir le tableau");
             System.out.println("2. Choisir une case");
@@ -24,21 +24,32 @@ public class Main {
                     break;
                 case 1:
                     System.out.println("");
-                    Echec.affichePlateau();
+                    Echec.getPlateau();
                     System.out.println("");
                     break;
                 case 2:
+                    System.out.println("");
+                    if(tourDuJoueur%2 == 0){
+                        System.out.println("Tour du joueur 1 : Pièce blanc");
+                    } else{
+                        System.out.println("Tour du joueur 2 : Pièce noire");
+                    }
+                    System.out.println("");
+                    tourDuJoueur++;
                     System.out.print("Veuillez saisir la case :");
                     String caseChoix = scString.nextLine();
-                    Case test = Echec.getPieceCase(caseChoix);
-                    if(test.getContent()){
-                        System.out.println("Case " + caseChoix + " contenant : " + test.getNomAfficher());
+                    Case caseSelection = Echec.getPieceCase(caseChoix);
+                    if(caseSelection.getContentPiece()){
+                        System.out.println("Case " + caseChoix + " contenant : " + caseSelection.getNomAffiche());
                         System.out.print("Veuillez saisir la case cible : ");
                         String caseCible = scString.nextLine();
+
                         Echec.deplacerPiece(caseChoix, caseCible);
                     } else {
-                        System.out.println("La case est vide, recommencez votre choix.");
+                        System.out.println("La case est vide, retour au menu");
                     }
+                    System.out.println("");
+                    System.out.println("");
                     break;
                 default:
                     System.out.println("Erreur, la partie s'arrête");
@@ -48,4 +59,75 @@ public class Main {
 
 
     }
+    /*
+    public static void main(String[] args) {
+        Plateau Plateau = new Plateau();
+        Scanner scannerString = new Scanner(System.in);
+        boolean partieTerminee = false;
+        int numJoueur = 0;
+        boolean nextJoueur;
+        boolean entreeValide = false;
+
+        System.out.println("");
+        Plateau.getPlateau();
+        System.out.println("");
+
+        do{
+            if(Plateau.getPartieFinie() == true) {
+                break;
+            }
+            if(numJoueur%2 == 0){
+                System.out.println("Tour du joueur blanc");
+            } else{
+                System.out.println("Tour du joueur noir");
+            }
+            numJoueur++;
+
+            do{
+                System.out.print("Choisissez la case :");
+                String caseChoisi = scannerString.nextLine();
+                if(isValidLetter(caseChoisi)){
+                    if(isValidNumber(caseChoisi)){
+                        entreeValide = true;
+                    } else{
+                        break;
+                    }
+                } else {
+                    break;
+                }
+                if(Plateau.getPieceCase(caseChoisi).isTaken()){
+                    System.out.println("La case " + caseChoisi + " contient la pièce : " + Plateau.getPieceCase(caseChoisi).getNomAffiche());
+                    System.out.print("Choisissez la case cible : ");
+                    String caseCible = scannerString.nextLine();
+
+                    if(isValidLetter(caseCible)){
+                        if(isValidNumber(caseChoisi)){
+                            entreeValide = true;
+                        } else{
+                            break;
+                        }
+                    } else {
+                        break;
+                    }
+                    Plateau.deplacerPiece(caseChoisi, caseCible);
+                    nextJoueur = true;
+                } else {
+                    System.out.println("La case est vide, veuillez recommencer votre choix.");
+                    nextJoueur = false;
+                }
+            } while (nextJoueur == false);
+
+            if(entreeValide == false){
+                System.out.println("La saisie n'est pas valide.");
+                break;
+            }
+
+            System.out.println("");
+            Plateau.getPlateau();
+            System.out.println("");
+
+        }while(partieTerminee == false);
+
+
+    }*/
 }

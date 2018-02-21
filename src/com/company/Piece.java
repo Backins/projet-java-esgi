@@ -1,19 +1,21 @@
 package com.company;
 
-public class Piece {
-    private int couleurPiece; // 0 = noir, 1 blanc
-    protected boolean premierCoup;
+class Piece {
+    //0 = noire
+    //1 = blanche
+    private int couleurPiece;
+    protected boolean isFirstMovement;
 
-    public Piece(int pCouleurPiece){
-        couleurPiece = pCouleurPiece;
-        premierCoup = true;
+    public Piece(int LaCouleurPiece){
+        couleurPiece = LaCouleurPiece;
+        isFirstMovement = true;
     }
 
     public int getCouleurPiece() {
         return couleurPiece;
     }
 
-    public boolean checkLegaliteMove(int hauteur, int largeur){
+    public boolean checkLegalMovement(int hauteur, int largeur){
         return true;
     }
 }

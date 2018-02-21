@@ -1,38 +1,38 @@
 package com.company;
 
-public class Case {
-    private boolean content;
+class Case {
+    private boolean contentPiece;
     private Piece piece;
-    private String nomAfficher;
+    private String nomAffiche;
 
     public Case() {
-        content = false;
-        nomAfficher = "  ";
+        contentPiece = false;
+        nomAffiche = "  ";
     }
 
-    public Case(Piece pNomPiece, String pNomAfficher) {
-        content = true;
-        piece = pNomPiece;
-        nomAfficher = pNomAfficher;
+    public Case(Piece LeNomPiece, String LeNomAffiche) {
+        contentPiece = true;
+        piece = LeNomPiece;
+        nomAffiche = LeNomAffiche;
     }
 
-    public String getNomAfficher() {
-        return nomAfficher;
+    public String getNomAffiche() {
+        return nomAffiche;
     }
-    public boolean getContent(){
-        return content;
+    public boolean getContentPiece(){
+        return contentPiece;
     }
     public Piece getPiece(){
         return piece;
     }
-    public void setPiece(Piece pPiece, String pNomAfficher){
-        piece = pPiece;
-        nomAfficher = pNomAfficher;
-        content = true;
+    public void setPiece(Piece LaPiece, String LeNomAffiche){
+        piece = LaPiece;
+        nomAffiche = LeNomAffiche;
+        contentPiece = true;
     }
     public void removePiece(){
         piece = null;
-        nomAfficher = "  ";
-        content = false;
+        nomAffiche = "  ";
+        contentPiece = false;
     }
 }
