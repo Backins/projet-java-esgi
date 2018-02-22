@@ -32,8 +32,10 @@ public class Main {
                 System.out.print("Choisissez la case :");
                 String caseChoisi = scannerString.nextLine();
                 if(isValidLetter(caseChoisi)){
+                    System.out.println("Toto");
                     if(isValidNumber(caseChoisi)){
                         entreeValide = true;
+                        System.out.println("Tata");
                     } else{
                         break;
                     }
@@ -99,7 +101,7 @@ public class Main {
         }
     }
     public static boolean isValidNumber(String Saisie){
-        switch (Saisie.substring(0,1)){
+        switch (Saisie.substring(1,2)){
             case "1":
                 return true;
             case "2":
